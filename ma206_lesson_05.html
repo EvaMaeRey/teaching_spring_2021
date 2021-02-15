@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ma206_lesson_05.utf8</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1579042400781-10af46e0d081?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NTB8fGxhZHklMjB0YXN0aW5nJTIwdGVhfGVufDB8fDB8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=60)
+background-size: cover
+
+# .Large[p-value, z-statistic and consistency with the chance model]
+
+## .small[]
+#### .tiny[Dr. Evangeline Reynolds | Meeting 4 | 2021-02-04 | Image credit: Emily Campbell, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;!-- &lt;img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Hinman_collator.jpg" width="150px"/&gt; --&gt;
+
+---
+
+# Agenda
+
+- Housekeeping
+
+  - record the session!
+  - Wiley plus instructor points... 50 points
+  - instructor bonus points...
+  - remaining 25 instructor points
+
+---
+
+# Homework - Try for friday (or email - 'I'm stuck')
+
+- New instructor points - submit "knit" html document (or let me know you need help, by midnight Friday) 
+- data manipulation
+- data visualization
+
+---
+
+# Exploration exercise #1 - Due by start of lesson six! Monday
+
+Download it and upload to blackboard.  
+
+Each Exploration is 10 points
+
+
+---
+
+# Course project (300 points of 1000 total points in course) 
+
+- Meeting 8 - groups and projects defined (a week from tomorrow)
+- Course project, groups of 2
+
+https://usma.blackboard.com/ultra/courses/_22786_1/cl/outline
+
+- Trouble finding partner? Let me know.  
+
+
+---
+
+# Statistics as a practice of managed uncertainty
+
+&gt; When one admits that nothing is certain, one must, I think, also add that some things are much more nearly certain than others. - Bertrand Russell
+
+---
+
+# Statistics as a practice of managed uncertainty
+
+
+&gt; For my part I know nothing with any certainty, but the sight of the stars makes me dream. - Vincent van Gogh
+
+---
+
+# Statistics as a practice of managed uncertainty
+
+
+&gt; Fisher on the null hypothesis (chance model): "never proved or established, but is **possibly disproved**, in the course of experimentation."  *The Design of Experiments*
+
+---
+
+# Statistics as a practice of managed uncertainty
+
+
+&gt; Fisher on the null hypothesis (chance model): "never proved or established, but **you may find strong evidence it**, in the course of experimentation."  *The Design of Experiments*
+
+---
+
+&gt; Wiley not-so-good answer:  "The chance model is wrong" 
+
+---
+
+&gt; Wiley answer correction:  "There is strong evidence against the chance model" **or** "The observed data is quite inconsistent with the chance model"
+
+---
+name: dolphins
+class: inverse
+background-image: url(https://images.unsplash.com/photo-1611890129309-31e797820019?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OXx8ZG9scGhpbnN8ZW58MHx8MHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=60)
+background-size: cover
+
+# Could getting 15 out of 16 fish have happen just by chance?  
+
+--
+
+Is that possible?  
+
+--
+
+Is it probable? Is it likely?
+
+
+---
+name: dolphins
+class: inverse
+background-image: url(https://images.unsplash.com/photo-1611890129309-31e797820019?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OXx8ZG9scGhpbnN8ZW58MHx8MHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=60)
+background-size: cover
+
+# Could getting 15 out of 16 fish have happen just by chance?  
+
+p-value - *Exactly* how likely to see that extreme or more extreme if chance generated the outcome
+
+
+"this would only happen 1 in 1000 based on a chance model" 
+--
+p-value 
+--
+= 1/1000 
+--
+= .001
+
+---
+
+# p-value: How often 
+--
+(the proportion of the time) 
+--
+we would see an outcome 
+--
+as extreme 
+--
+or more extreme 
+--
+than what is observed 
+--
+if the null (chance model) is true.
+
+
+---
+
+# Notation
+
+## Null Hypothesis (Chance) $$ H_0 $$ 
+
+
+--
+
+## If evidence is strong against, 
+--
+then we can 
+--
+**reject the null**,
+-- 
+`\(H_0\)`, 
+--
+and accept the alternative hypothesis 
+--
+`\(H_A\)`
+
+
+
+
+---
+
+## Alternatively, we can calculate a "z score" to talk about being extreme from what's seen under chance.
+
+
+
+## How far away from the chance model center?
+
+--
+
+## Measure...
+
+
+--
+
+### in fish?
+
+--
+
+### in standard deviations! 
+
+--
+
+### z is a *standardized statistic*
+
+
+
+---
+
+# Calculating the Z statistic
+
+z = observed - average of chance model / standard deviation
+
+
+
+
+
+---
+
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_01_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_02_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_03_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_04_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_05_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_06_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_07_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_08_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_09_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_10_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_11_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_12_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_13_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_14_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_15_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_16_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_17_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_18_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_19_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_chance_20_20_output-1.png)&lt;!-- --&gt;
+
+&lt;style&gt;
+.panel1-dolphins_plot_chance-20 {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-dolphins_plot_chance-20 {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-dolphins_plot_chance-20 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+
+count: false
+
+![](ma206_lesson_05_files/figure-html/dolphins_plot_1_01_output-1.png)&lt;!-- --&gt;
+
+&lt;style&gt;
+.panel1-dolphins_plot-1 {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-dolphins_plot-1 {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-dolphins_plot-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+
+![](ma206_lesson_05_files/figure-html/chance_v_observed_user_01_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/chance_v_observed_user_02_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/chance_v_observed_user_03_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/chance_v_observed_user_04_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/chance_v_observed_user_05_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/chance_v_observed_user_06_output-1.png)&lt;!-- --&gt;
+
+---
+count: false
+
+![](ma206_lesson_05_files/figure-html/chance_v_observed_user_07_output-1.png)&lt;!-- --&gt;
+
+&lt;style&gt;
+.panel1-chance_v_observed-user {
+  color: black;
+  width: 99%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-chance_v_observed-user {
+  color: black;
+  width: NA%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-chance_v_observed-user {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+
+---
+
+## Consistent or not consistent w/ chance model?
+
+--
+
+## Z score of 1.2?
+
+--
+
+## Z score of 3?
+
+--
+
+## Z score of -1?
+
+--
+
+## Z score of -5?
+
+
+
+
+
+---
+
+background-image: url(images_for_lecture/normal_histogram.svg)
+background-size: 550px
+background-position: 50% 80%
+
+#### Interpretation
+
+
+
+
+---
+
+# The applet!
+
+-  1. Null: There is an equal distribution of classes years (Plebe, Yuk, Cow, Firstie) in MA206 - (prop = .25)
+
+-  2. Null: There is a fifty-fifty chance of an MA206 student liking chocolate-containing candy as favorite.
+
+-  3. Book exercise:  Who's more the more successful politician - do people lean one way? Or from our poll, do we observe something consistent with chance.     
+
+
+
+
+
+---
+
+Next session: 
+
+Central limit theorem, normal distribution, and assumptions of the theory based approach.
+
+
+---
+
+
+
+
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Sample Standard Deviation --&gt;
+
+
+&lt;!-- $$ \sigma = \sqrt\frac{\sum_{i=1}^{n}(x_i - \mu)^2} {n-1} $$ --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

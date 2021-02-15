@@ -1,0 +1,239 @@
+---
+title: "Practice time!"
+author: "Me"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+# Setup
+
+We'll use the tidyverse
+
+```{r setup, include=F}
+library(tidyverse)
+```
+
+
+# One proportion z test
+
+- Step 1 calculate sample proportion
+- Step 2 calc sd for the null:
+- Step 3 calc z stat
+- Step 4 translate to p-value
+
+# Example: 2nd years in MA206 - theory based approach - z statistc
+
+Is the population of MA206 students composed of equal parts of the classes?  More specifically are 2nd years 
+
+
+## Step 1: Calculate the statistic, p-hat.  
+
+```{r theory_p_val_calc}
+457 -> num_observations # number of matches
+
+## calculate sample proportion p hat
+248 / 457 -> # number of wins for red uniform wearer over total Olympic matches
+  sample_proportion
+
+sample_proportion
+```
+
+
+We'll use a little MathJax here too, which translates from plain text to equations which may contain fractions, special characters, sub- and superscripts.  In the MathJax environment below, fenced by dollar signs, **replace the question mark with the calculated statistic, phat.**
+
+$$ \hat{p} = ? $$
+
+```{r}
+# I can make a little data frame using tibble
+tibble(color_of_winner = c("red", "blue"),
+       count = c(248, 457-248)) ->
+olympics_matches
+
+olympics_matches
+
+
+ggplot(data = olympics_matches) +
+  aes(x = color_of_winner) +
+  aes(y = count) +
+  geom_col() +
+  labs(title = "In 457 matches there are more winners that were randomly assigned\nto wear red than winners assigned blue") +
+  labs(subtitle = "The observed split is not 50/50.  But could it still have just arisen from chance?")
+```
+
+
+
+## Step 2: Use the null, $\pi$ to think about the distribution under the chance model  
+
+
+```{r}
+## establish pi
+.5 -> 
+  null_prob
+```
+
+**Replace the question mark with the value of $\pi$ for the null hypothesis and alternative hypothesis (this is two-sided).**
+
+$$ H_0:  \pi = ? $$
+$$ H_A:  \pi \neq ? $$
+**Answer the following question:** Is $\pi$ a *population* parameter? In other words, are we trying to generalize to a population. Or does it describe an underlying rate? 
+
+> Your answer here...
+
+### Based on $\pi$ and the number of observations, how much variability is expected under the chance model?  We can use the formula to describe the variability - the standard deviation for the chance model:
+
+$$ sd_{chance} =  \sqrt{\frac{\pi*(1-\pi)}{n}} $$
+In R, as follows:
+
+```{r}
+## calc sd for the null:
+sqrt((null_prob * (1-null_prob)) / num_observations ) ->
+  sd_chance_model
+
+sd_chance_model
+```
+
+Given that the distribution for the chance model is approximately normal, and what we know about [normal distributions](https://upload.wikimedia.org/wikipedia/commons/8/8c/Standard_deviation_diagram.svg), we expect ~68% of what's observed just under chance variation to fall within the range...
+
+$$ .5 \pm ? $$
+
+
+Let's visualize the normal distribution that is implied by the standard deviation we've calculated.
+
+```{r}
+tibble(x = 400:600/1000) %>% 
+  mutate(density = 
+           dnorm(x, 
+                 mean = .5, 
+                 sd = sd_chance_model)) ->
+normal_density_25percent_15observations
+
+ggplot(data = normal_density_25percent_15observations) + 
+  aes(x = x) +
+  aes(y = density) + 
+  geom_area(alpha = .75) + # null model
+  geom_vline(xintercept = null_prob) + # expectation under the null
+  geom_vline(xintercept = sample_proportion, # what's actually observed
+             color = "red") +
+  geom_vline(xintercept = .5 - (sample_proportion - .5), # symmetrical distance from pi
+             color = "red", linetype = "dashed")
+```
+
+
+## Step 3: Describe how consistent/inconsistent using z-statistic (number of standard deviations from the mean of the null model)
+
+```{r}
+## calculate z score
+(sample_proportion - null_prob) /
+  sd_chance_model ->
+z_score
+
+z_score
+```
+
+## Step 4: translate z-score to p-value
+
+Using `pnorm()` we translate from the z-score to a p-value, the probability of observing something as extreme or more extreme than the observed outcome, just by chance...
+
+```{r}
+# situate in normal distribution 
+(1 - pnorm(abs(z_score))) * 2 # we are multiplying times two if two-sided
+```
+
+
+
+---
+
+# Using `prop.test()` function will do this for you too..
+
+```{r echo = T, comment="", warning=F}
+prop.test(x = 248, # number "successes" observed 
+          n = 457, # total number observed
+          p = .5, # proportion expected under null, pi
+          alternative = "two.sided", # which extremes count, other options is "greater" "less" for one sided
+          correct = F) # use classic prop test
+```
+
+
+
+There is quite a lot of output, but you should be familiar with many elements.  What are some of the statistics that look familiar. **Replace question marks below with numerical values or text**
+
+Based on the output:
+
+- $p-value$ = ?
+- null probability, $\pi$ = ?
+- sample estimate, i.e. the observed proportion, $\hat{p}$ = ?
+- alternative hypothesis, $H_A$ = ?
+
+Confirm that the p-value you calculated in the 4 step process is the same as `prop.test()`
+
+> Is it the same? Y/N
+
+**Answer the question**: if my $\alpha$ threshold is .05, is my p-value small enough to reject the null hypothesis?
+
+> your answer here...
+
+
+Note:
+
+- A value of \alpha = 0.05 implies that the null hypothesis is rejected 5 % of the time when it is in fact true. "Type 1" (false positive) error rate.
+
+- A value of \alpha = 0.01 implies that the null hypothesis is rejected 1 % of the time when it is in fact true. "Type 1" (false positive) error rate.
+
+
+
+## prop.test() exercise
+
+Change the values below to see if there is 
+
+```{r echo = T, comment="", warning=F}
+prop.test(x = 248, # number "successes" observed 
+          n = 457, # total number observed
+          p = .5, # proportion expected under null, pi
+          alternative = "greater", # which extremes count, other options is "greater" "less" for one sided
+          correct = F) # use classic prop test
+```
+
+
+
+
+# Continuous Data
+
+Motivating example:
+
+Let's use the faithful dataset to start off.  Have a look at the faithful dataset.  
+
+The variable names are...
+
+> your answer here
+
+The 
+
+```{r}
+faithful
+```
+**In the help tab in rstudio, search for faithful.  Change the question marks in the plot title according to what you find** 
+
+```{r}
+ggplot(data = faithful) +
+  aes(x = eruptions) +
+  geom_rug() + 
+  geom_histogram(color = "lightgrey") +
+  labs(x = "length of eruption") +
+  labs(y = "number of observations in x interval") +
+  labs(title = ) +
+  labs(subtitle = "Data from R datasets, based on Hardie W. 19??")
+```
+
+
+
+*Now, create a similar plot using the song lengths data.*
+
+
+```{r}
+
+```
+
+

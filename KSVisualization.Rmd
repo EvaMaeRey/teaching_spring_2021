@@ -1,0 +1,193 @@
+---
+title: "Kolmogorov–Smirnov test - Permutation"
+output: pdf_document
+---
+
+# Two distributions
+
+```{r}
+library(stats)
+library(patchwork)
+library(extrafont)
+
+library(ggplot2)
+# library(cowplot)
+library(animation)
+library(tidyverse)
+set.seed(12345)
+z <- rnorm(51)
+w <- rnorm(29, sd = 2.25)
+# plot(ecdf(x), xlim = range(c(x, y)))
+# plot(ecdf(y), add=T,xlim = range(c(x, y)))
+# lines(c(mean(x),mean(x)),c(0,ks.test(x, y)[[1]]), col="green")
+range=range(z,w)
+
+dta = bind_rows(
+  data_frame(value = z) %>% mutate(group = "z"),
+  data_frame(value = w) %>% mutate(group = "w"))
+
+g1 = ggplot(dta, aes(value, fill = group)) + geom_density(alpha = .5) + 
+  geom_rug(data = dta, aes(value, col = group), lwd = 1.5, alpha = .5) + 
+  ggtitle("1. Consider Observed Data", "Distribution of Values for Groups W and Z:") + 
+  theme_bw(base_size = 10, base_family = "Comic Sans MS")+ ylim(0,.5) #+
+  # scale_fill_manual(values = c("violet", "green"))+
+  # scale_color_manual(values = c("violet", "green"))
+g1
+```
+
+# Cumulative distribution function
+
+```{r}
+sequence = seq(from = min(range), to = max(range), by = .1)
+ecdf_z <- ecdf(dta$value[dta$group == "z"])
+ecdf_w <- ecdf(dta$value[dta$group == "w"])
+pz = ecdf_z(sequence) 
+pw = ecdf_w(sequence) 
+
+# Do x and y come from the same distribution?
+ks.test(z, w)
+p = .02051
+
+
+D=ks.test(z, w)[[1]]
+ 
+d_scan=data_frame(pz, pw, sequence, `Vertical \nDistance`=abs(pz-pw))
+
+ggplot(dta, aes(value, col = group)) + stat_ecdf() 
+
+
+g2 = ggplot(d_scan, aes(sequence)) + 
+  stat_function(fun = ecdf_w, 
+                geom = "line", col = "#F8766D", n = 2000) +
+  stat_function(fun = ecdf_z, 
+                geom = "line", col = "#00BFC4", n = 2000) +
+  geom_segment(data = d_scan, aes(x = sequence, xend = sequence, 
+                              y = pw, yend = pz, group = sequence, 
+                              col = `Vertical \nDistance`)) + 
+  # stat_ecdf(dta, aes(value, col = group)) +
+  ggtitle("", "Empirical Cumulative Distribution Functions (ECDF) of Z and W") + theme_bw(base_size = 10, base_family = "Comic Sans MS") +
+  annotate("text", x = 3, y = .2, label = paste("D-ks (maximum \n observed vertical distance) \n = ", round(D,2)), size = 3) + 
+  xlab("value") + 
+  ylab("probability") +
+  scale_color_viridis_c(breaks = seq(0, 1, .1), limit = c(0,.4))
+g2
+
+```
+
+# Permutation Test (D)
+```{r, fig.height=12, fig.keep="animate"}
+set.seed(2356)
+routine = function(trials = 10){
+Ds = c()
+for(i in 1:trials){
+  
+# reassign values
+dta = dta %>% mutate(shuffle = sample(value))
+#   
+# X = sample(c(x,w),50, replace = T)+rnorm(50,sd=.01)
+# Y = sample(c(x,w),30, replace = T)+rnorm(30,sd=.01)
+# plot(ecdf(X), xlim = range(c(X, Y)))
+# plot(ecdf(Y), add=T,xlim = range(c(X, Y)))
+# lines(c(mean(X),mean(X)),c(0,ks.test(X, Y)[[1]]), col="green")
+Ds[i] = ks.test(dta$shuffle[dta$group == "w"], 
+                dta$shuffle[dta$group == "z"])$statistic
+
+g3 = ggplot(dta, aes(shuffle, fill = group)) +
+     geom_density(alpha = .5) +
+     geom_rug(data = dta, aes(shuffle, col = group), lwd = 1.5, alpha = .5) +
+     ggtitle("2. Imagine Counterfactuals:", "Result of randomly reassigning the group labels \n(Plausible distributions under sharp null)") +
+  theme_bw(base_size = 10, base_family = "Comic Sans MS") + xlab("value") + ylim(0,.5)
+
+# scan range
+sequence = seq(from = min(range), to = max(range), by = .1)
+ecdf_z <- ecdf(dta$shuffle[dta$group == "z"])
+ecdf_w <- ecdf(dta$shuffle[dta$group == "w"])
+pz = ecdf_z(sequence)
+pw = ecdf_w(sequence)
+
+d_scan = data_frame(pz, pw, sequence, `Vertical \nDistance`=abs(pz-pw))
+
+g4 =
+  ggplot(d_scan, aes(sequence)) +
+  stat_function(fun = ecdf_w, geom = "line", col = "#F8766D", n = 2000) +
+  stat_function(fun = ecdf_z, geom = "line", col = "#00BFC4", n = 2000) +
+  geom_segment(data = d_scan,
+               aes(x = sequence, xend = sequence,
+                   y = pw, yend = pz,
+                   group = sequence, col = `Vertical \nDistance`)) +
+  ggtitle("","ECDF for randomly reassigned group") + 
+  theme_bw(base_size = 10, base_family = "Comic Sans MS") + xlab("value") +
+  annotate("text", x = 3, y = .2, label = paste("D-ks (maximum \nvertical distance) = \n", round(Ds[i],2)), size = 3) +
+  scale_color_viridis_c(breaks = seq(0, 1, .1), limit = c(0,.4))
+
+df_ds = data_frame(Ds)
+
+g5 = ggplot(data = df_ds, aes(Ds)) + geom_density() +
+  geom_vline(xintercept = D, lty = 2) +
+  geom_vline(xintercept = Ds[i], lty = 3, 
+             col = ifelse(D < Ds[i], "red", "black")) + 
+  geom_rug(aes(col = Ds > D), lwd = 1.5, alpha = .5) + xlim(c(0,.4)) +
+  ggtitle("3. Compare Observed to Counterfactuals:", 
+          paste( "Collection of max verticle distance between ECDFs of \ngroups for", i ,"random reassignments")) + 
+  theme_bw(base_size = 10, base_family = "Comic Sans MS") + 
+  scale_y_continuous(limits = c(0, 30), expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, .5), expand = c(0, 0)) +
+  annotate(geom = "text", label = "D-ks for \nrealized data", 
+           x = .44, y = 20, size = 3) + 
+  annotate(geom = "segment", x = .38, y = 20, xend = D, 
+           yend  = 20, arrow = arrow(length = unit(0.5,"cm"))) +
+  scale_color_manual(name = "D-ks shuffle \u2265\n D-ks observed", 
+                     values = c("black","red")) +
+  scale_fill_manual(name = "D-ks shuffle \u2265\n D-ks observed", 
+                    values = c("black", "red")) 
+
+g6 = ggplot(df_ds %>% mutate(`D-ks shuffle >= D-ks observed`= Ds >= D), 
+            aes(`D-ks shuffle >= D-ks observed`, fill = `D-ks shuffle >= D-ks observed`)) + 
+  ggtitle("","Number of times random reassignment yields as extreme \nor more extreme D-ks compared with observed data") + 
+  geom_bar() + ylim(c(0,trials+10)) + xlim(c("FALSE", "TRUE")) +
+  scale_fill_manual(name = "D-ks shuffle \u2265\n D-ks observed", values = c("black", "red")) + theme_bw(base_size = 10, base_family = "Comic Sans MS")+ geom_text(stat = 'count',aes(label=..count..), vjust= -1, size = 3.5)
+
+# print(plot_grid(g1, g2, g3, g4, g5, g6, align = c("h","w"), ncol = 2))
+
+print((g1 + g2 ) / (g3 +  g4) / (g5 + g6) +  
+  plot_annotation(title = "Are the differences in distributions for groups W and Z statistically significant?\nVisualizing the Kolmogorov–Smirnov Test ", 
+                  subtitle =  "Gina Reynolds | @EvaMaeRey", theme = theme_classic(base_size = 16, base_family = "Comic Sans MS")) )
+
+}
+}
+
+
+saveGIF({
+  ani.options(nmax = 30)
+  routine(trials = 1)
+
+}, interval = c(1.8,1.5,1.2,1,.8,.8,.8,.8,.75,.7,.65,.6,.55,.5,.45,.4,
+                rep(.4, 90))/4, movie.name = "ks_permutation_frame_one.gif", 
+ani.width = 800, ani.height = 600)
+
+
+  # Distribution of Ds
+# ggplot(data = df_ds, aes(Ds)) + geom_histogram() +
+  # geom_vline(xintercept = ks.test(z, w)[[1]], lty = 2)
+
+# sum(Ds > ks.test(z, w)[[1]])/trials
+
+```
+
+```{r, eval = F}
+
+# ks.test(x, y)[[1]]
+# # Does x come from a shifted gamma distribution with shape 3 and rate 2?
+# ks.test(x+2, "pgamma", 3, 2) # two-sided, exact
+# ks.test(x+2, "pgamma", 3, 2, exact = FALSE)
+# ks.test(x+2, "pgamma", 3, 2, alternative = "gr")
+# test if x is stochastically larger than x2
+# x2 <- rnorm(50, -1)
+# plot(ecdf(x), xlim = range(c(x, x2)))
+# plot(ecdf(x2), add = TRUE, lty = "dashed")
+# t.test(x, x2, alternative = "g")
+# wilcox.test(x, x2, alternative = "g")
+# ks.test(x, x2, alternative = "l")
+```
+
+
