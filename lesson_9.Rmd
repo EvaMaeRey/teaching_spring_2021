@@ -16,17 +16,24 @@ library(tidyverse)
 ```
 
 
-# One proportion z test
+# Part I. One proportion z test calculations
+
+Below you will go through the steps in the course guide to do the theory based test - the one proportion z test.  
 
 - Step 1 calculate sample proportion
-- Step 2 calc sd for the null:
+- Step 2 calc sd for the null (chance) model
 - Step 3 calc z stat
 - Step 4 translate to p-value
 
-> Example: Boxing data...
+> Example: Boxing in Red and Blue
 
+You've done an exploration exercise with the data on Olympic events where opponents are randomly assigned to wear red or blue.  Researchers asked: Is there an advantage to being assigned one color over the other?
 
-## Calculating the z-stat and p-value step-by-step
+They observed that in 457 matches, 248 were won by the opponent wearing red.  
+
+You used the applet for you exploration exercise. Now let's use R and Rmarkdown to go throught this.  Much is worked out for you, but you will be prompted to answer questions throughout.
+
+## Part 1.a. Calculating the z-stat and p-value step-by-step
 
 For an overview: check out the slides [here](ma206_lesson_06.html#73)
 
@@ -43,7 +50,7 @@ sample_proportion
 ```
 
 
-We'll use a little MathJax here too, which translates from plain text to equations which may contain fractions, special characters, sub- and superscripts.  In the MathJax environment below, fenced by dollar signs, **replace the question mark with the calculated statistic, phat.**
+We'll use a little "MathJax" here too, which translates from plain text to equations which may contain fractions, special characters, sub- and superscripts. In the MathJax environment below, fenced by dollar signs, **replace the question mark with the calculated statistic, phat.**
 
 $$ \hat{p} = ? $$
 
@@ -60,8 +67,8 @@ ggplot(data = olympics_matches) +
   aes(x = color_of_winner) +
   aes(y = count) +
   geom_col() +
-  labs(title = "In 457 matches there are more winners that were randomly assigned\nto wear red than winners assigned blue") +
-  labs(subtitle = "The observed split is not 50/50.  But could it still have just arisen from chance?")
+  labs(title = "In 457 matches there are more winners that were\nrandomly assigned to wear red than\nwinners assigned blue") +
+  labs(subtitle = "The observed split is not 50/50.\n But could it still have just arisen from chance?")
 ```
 
 
@@ -96,10 +103,16 @@ sqrt((null_prob * (1-null_prob)) / num_observations ) ->
 sd_chance_model
 ```
 
-Given that the distribution for the chance model is approximately normal, and what we know about [normal distributions](https://upload.wikimedia.org/wikipedia/commons/8/8c/Standard_deviation_diagram.svg), we expect ~68% of what's observed just under chance variation to fall within the range...
+Given that the distribution for the chance model is approximately normal, and what we know about 
+
+![normal distributions](https://upload.wikimedia.org/wikipedia/commons/8/8c/Standard_deviation_diagram.svg) 
+
+We expect ~68% of what's observed just under chance variation to fall within 1 standard deviation or the range .5 plus or minus...
 
 $$ .5 \pm ? $$
+We expect 95.5% of the variation under the chance model to happend within 2 standard deviations of $\pi$, or .5 plus or minus ...
 
+$$ .5 \pm ? $$
 
 Let's visualize the normal distribution that is implied by the standard deviation we've calculated.
 
@@ -115,7 +128,19 @@ ggplot(data = normal_density_25percent_15observations) +
   aes(x = x) +
   aes(y = density) + 
   geom_area(alpha = .75) + # null model
-  geom_vline(xintercept = null_prob) + # expectation under the null
+  geom_vline(xintercept = null_prob) # expectation under the null
+```  
+  
+Execute the following code.  What does `last_plot()` do?  
+
+> your answer...
+
+What are we adding in the followin plot?
+
+> your answer...
+  
+```{r}  
+last_plot() +
   geom_vline(xintercept = sample_proportion, # what's actually observed
              color = "red") +
   geom_vline(xintercept = .5 - (sample_proportion - .5), # symmetrical distance from pi
@@ -136,24 +161,33 @@ z_score
 
 ### Step 4: translate z-score to p-value
 
-Using `pnorm()` we translate from the z-score to a p-value, the probability of observing something as extreme or more extreme than the observed outcome, just by chance...
+Using `pnorm()` we translate from the z-score to a p-value, the probability of observing something as extreme or more extreme than the observed outcome, just by chance...  Here we use the 2 tailed test.  The case where we don't have a strong expectation about the direction of the effect - blue *or* red might be advantageous.
 
 ```{r}
 # situate in normal distribution 
 (1 - pnorm(abs(z_score))) * 2 # we are multiplying times two if two-sided
 ```
 
+If my critical value $\alpha$ is .05, is the p-value small enough to reject the null hypothesis, $H_0\neq .5$?
 
+> your answer here...
+
+If I have a strong prior expectation -- being clad in *red* -- a threat color in nature -- I should expect to win more, I might conduct a *one sided test.*  In this case, what is the p-value? 
+
+When 
+
+$$H_0 \leq 5,  H_A>.5 $$ 
+$$p-value = ? $$
 
 ---
 
-## Using `prop.test()` function will do this for you too..
+## Part 1.b. Using `prop.test()` function will do this for you too.
 
 ```{r echo = T, comment="", warning=F}
 prop.test(x = 248, # number "successes" observed 
           n = 457, # total number observed
           p = .5, # proportion expected under null, pi
-          alternative = "two.sided", # which extremes count, other options is "greater" "less" for one sided
+          alternative = "two.sided", # which extremes count for alternative hypothesis, other options is "greater" "less" for one sided
           correct = F) # use classic prop test
 ```
 
@@ -168,28 +202,34 @@ Based on the output:
 - sample estimate, i.e. the observed proportion, $\hat{p}$ = ?
 - alternative hypothesis, $H_A$ = ?
 
-Confirm that the p-value you calculated in the 4 step process is the same as `prop.test()`
+We will also talk about confidence intervals soon.  What is the reported confidence interval?
+
+> your answer here
+
+Confirm that the p-value you calculated in the 4-step process is the same as `prop.test()`
 
 > Is it the same? Y/N
 
-**Answer the question**: if my $\alpha$ threshold is .05, is my p-value small enough to reject the null hypothesis?
-
-> your answer here...
-
-
-Note:
-
-- A value of \alpha = 0.05 implies that the null hypothesis is rejected 5 % of the time when it is in fact true. "Type 1" (false positive) error rate.
-
-- A value of \alpha = 0.01 implies that the null hypothesis is rejected 1 % of the time when it is in fact true. "Type 1" (false positive) error rate.
 
 
 
-## prop.test() exercise
 
-Change the values below to see if there is 
+## prop.test() exercise for generalizing to a population
+
+Change the values for the NYC Mayor Bloomberg Big Gulp Ban question.
+
+1093 individuals of NYC 4 million registered voters were polled using a ...
+
+> choose 1 (simple random sample/ convenience sample)
+
+503 respondents supported the ban (46% or 1093) on super-sized sweet drinks.
+
+Is there evidence that overall the population of voters preference is different than 50-50 support?  I.e. is there statistically significant evidence against the null, $H_0=.5$?
+
+Below the inputs are set up for the olympics example.  Change them, and answer the question.
 
 ```{r echo = T, comment="", warning=F}
+# set up for boxing, change to big gulp!
 prop.test(x = 248, # number "successes" observed 
           n = 457, # total number observed
           p = .5, # proportion expected under null, pi
@@ -198,16 +238,18 @@ prop.test(x = 248, # number "successes" observed
 ```
 
 
+Based on the output once you've changed the test to the big gulp, super-sized drinks case fill in the values:
 
+- $p-value$ = ?
+- null probability, $\pi$ = ?
+- sample estimate, i.e. the observed proportion, $\hat{p}$ = ?
+- alternative hypothesis, $H_A$ = ?
 
-# Continuous variable and the t-statistic
-
-
+# Part II. Continuous variable and the t-statistic
 
 *Now, create a plot using the song lengths data.*
 
-Remember the 
-
+Here is the scenario:  48 people are asked to say how long they think a song snippet was (10 seconds of a Jackson 5 song they just heard).  The researchers want to know: on average do people tend to overestimate the song length or underestimate, or can't we say (consistent with neither over or underestimation - the null of 10 seconds on average).
 
 ```{r}
 # read in data (posted online) of time estimates for time-laps when a 10 second clip is played
@@ -254,7 +296,7 @@ If skewed, in what direction?
 
 **Task: In the plot above, change "30" in geom_vline(xintercept = 30) to the value of the mean.**
 
-## calculating the t-statistic and pvalue by hand
+## Part II.a: calculating the t-statistic and p-value by hand
 
 $$t-statistic = \frac{\bar{x} - \mu}{SE}$$
 Where SE is the standard *error*.  The sampling error is our expectation about how far away our mean might be from our true mean for any given sample from a population.  The central limit theorem tells us that for repeated samples, the mean will center on the population mean, and the distribution will be a fraction of the population standard deviation - specifically: the standard deviation divided by the square root of the sample size!  
@@ -290,12 +332,13 @@ Complete the following sentence by rounding the t-stat to the nearest whole numb
 > The observed mean is about ?? standard errors away from the parameter, 10.  
 
 
-## Using `t.test()`
+## Part II.b Using `t.test()`
 
 ```{r}
 t.test(x = jackson_five$time, 
        mu = 10)
 ```
+
 Verify that our t-stat matches the t.test result.
 
 > Does it match? Y/N
@@ -314,4 +357,4 @@ If my alpha level is .01
 
 Provide the definition of a confidence interval that the book gives here.  
 
-> 
+> The book definition is ...
