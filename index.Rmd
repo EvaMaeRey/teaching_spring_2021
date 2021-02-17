@@ -1,0 +1,19 @@
+---
+title: "MA206 Material"
+author: "Evangeline Reynolds"
+date: "2/16/2021"
+output: html_document
+---
+
+
+Slides:
+
+- [lesson 05](ma206_lesson_05.html){target="_blank"}
+- [lesson 06](ma206_lesson_06.html){target="_blank"}
+- [lesson 07](ma206_lesson_07.html){target="_blank"}
+
+
+
+Exercises:
+
+- [lesson_09.Rmd](lesson_9.Rmd) & [html preview](lesson_9.html)

@@ -1,6 +1,5 @@
 ---
-title: "Practice time!"
-author: "Me"
+title: "Practice time"
 output: 
   html_document:
     toc: true
@@ -24,12 +23,14 @@ library(tidyverse)
 - Step 3 calc z stat
 - Step 4 translate to p-value
 
-# Example: 2nd years in MA206 - theory based approach - z statistc
-
-Is the population of MA206 students composed of equal parts of the classes?  More specifically are 2nd years 
+> Example: Boxing data...
 
 
-## Step 1: Calculate the statistic, p-hat.  
+## Calculating the z-stat and p-value step-by-step
+
+For an overview: check out the slides [here](ma206_lesson_06.html#73)
+
+### Step 1: Calculate the statistic, p-hat.  
 
 ```{r theory_p_val_calc}
 457 -> num_observations # number of matches
@@ -65,7 +66,7 @@ ggplot(data = olympics_matches) +
 
 
 
-## Step 2: Use the null, $\pi$ to think about the distribution under the chance model  
+### Step 2: Use the null, $\pi$ to think about the distribution under the chance model  
 
 
 ```{r}
@@ -78,11 +79,11 @@ ggplot(data = olympics_matches) +
 
 $$ H_0:  \pi = ? $$
 $$ H_A:  \pi \neq ? $$
-**Answer the following question:** Is $\pi$ a *population* parameter? In other words, are we trying to generalize to a population. Or does it describe an underlying rate? 
+**Answer the following question:** Is $\pi$ a *population* parameter? In other words, are we trying to generalize to a population. Or does it describe an underlying rate for a process? 
 
 > Your answer here...
 
-### Based on $\pi$ and the number of observations, how much variability is expected under the chance model?  We can use the formula to describe the variability - the standard deviation for the chance model:
+Based on $\pi$ and the number of observations, how much variability is expected under the chance model?  We can use the formula to describe the variability - the standard deviation for the chance model:
 
 $$ sd_{chance} =  \sqrt{\frac{\pi*(1-\pi)}{n}} $$
 In R, as follows:
@@ -122,7 +123,7 @@ ggplot(data = normal_density_25percent_15observations) +
 ```
 
 
-## Step 3: Describe how consistent/inconsistent using z-statistic (number of standard deviations from the mean of the null model)
+### Step 3: Describe how consistent/inconsistent using z-statistic (number of standard deviations from the mean of the null model)
 
 ```{r}
 ## calculate z score
@@ -133,7 +134,7 @@ z_score
 z_score
 ```
 
-## Step 4: translate z-score to p-value
+### Step 4: translate z-score to p-value
 
 Using `pnorm()` we translate from the z-score to a p-value, the probability of observing something as extreme or more extreme than the observed outcome, just by chance...
 
@@ -146,7 +147,7 @@ Using `pnorm()` we translate from the z-score to a p-value, the probability of o
 
 ---
 
-# Using `prop.test()` function will do this for you too..
+## Using `prop.test()` function will do this for you too..
 
 ```{r echo = T, comment="", warning=F}
 prop.test(x = 248, # number "successes" observed 
@@ -199,41 +200,118 @@ prop.test(x = 248, # number "successes" observed
 
 
 
-# Continuous Data
-
-Motivating example:
-
-Let's use the faithful dataset to start off.  Have a look at the faithful dataset.  
-
-The variable names are...
-
-> your answer here
-
-The 
-
-```{r}
-faithful
-```
-**In the help tab in rstudio, search for faithful.  Change the question marks in the plot title according to what you find** 
-
-```{r}
-ggplot(data = faithful) +
-  aes(x = eruptions) +
-  geom_rug() + 
-  geom_histogram(color = "lightgrey") +
-  labs(x = "length of eruption") +
-  labs(y = "number of observations in x interval") +
-  labs(title = ) +
-  labs(subtitle = "Data from R datasets, based on Hardie W. 19??")
-```
+# Continuous variable and the t-statistic
 
 
 
-*Now, create a similar plot using the song lengths data.*
+*Now, create a plot using the song lengths data.*
+
+Remember the 
 
 
 ```{r}
+# read in data (posted online) of time estimates for time-laps when a 10 second clip is played
+read_csv(file = "https://raw.githubusercontent.com/EvaMaeRey/teaching_spring_2021/master/data/chap2.ElapsedTime.csv") %>% 
+  rename(time = Time) -> # rename Time as time - this is snake case a coding style that I prefer
+  jackson_five
 
+# you've read in the data and created the object:
+jackson_five
 ```
 
+**How many observations are there?**
 
+> your answer here...
+
+```{r}
+ggplot(data = jackson_five) + 
+  aes(x = time) + # time estimate responses from people
+  geom_rug(alpha = .1) + # alpha adjusts transparency of hashes
+  geom_histogram() +
+  geom_vline(xintercept = 10, # known song snippet length
+             linetype = "dashed") +
+  geom_vline(xintercept = 30) +
+  theme_minimal() +
+  labs(title = "Do we have evidence that on average people tend to overestimate \nor underestimatethe Jackson 5 song snippet length?\nOr is what's observed consistent with the null -\ni.e. not overestimating or underestimating on average\n(10 seconds is actually played)")
+```
+
+If the mean and median of the data are somewhat different, it is evidence of skew.
+
+```{r}
+mean(jackson_five$time)
+median(jackson_five$time)
+```
+
+**Answer**, Is there some evidence of skew?
+
+>  your answer:  yes/no
+
+If skewed, in what direction?
+
+> **keep the correct response:**  right (mean is > median - outlying, "unusual" values are pulling to the right) or left (mean is < median - outlying, "unusual" values are pulling to the left)
+
+
+
+**Task: In the plot above, change "30" in geom_vline(xintercept = 30) to the value of the mean.**
+
+## calculating the t-statistic and pvalue by hand
+
+$$t-statistic = \frac{\bar{x} - \mu}{SE}$$
+Where SE is the standard *error*.  The sampling error is our expectation about how far away our mean might be from our true mean for any given sample from a population.  The central limit theorem tells us that for repeated samples, the mean will center on the population mean, and the distribution will be a fraction of the population standard deviation - specifically: the standard deviation divided by the square root of the sample size!  
+
+$$SE = \frac{\sigma}{\sqrt{n}}$$
+Sigma is unknown (this is the standard deviation for the population, but we just have a sample), so we use $s$. $s$ denotes the sample standard deviation, in place of $\sigma$, the population standard deviation.
+
+All together:
+
+$$t-statistic = \frac{\bar{x} - \mu}{s/\sqrt{n}}$$
+
+First we calculate the standard error.
+
+```{r}
+sd(jackson_five$time)/sqrt(nrow(jackson_five)) ->
+  standard_error
+```
+
+Then, we need to figure out how far away, in standard errors, our observe mean $\bar{x}$ is from the $\mu$, the parameter (10 seconds).  the t-statistic, like the z-score, is a standardized statistic
+
+```{r}
+mean(jackson_five$time) - 10 ->
+  observed_v_parameter_difference
+
+observed_v_parameter_difference/standard_error ->
+  t_stat
+
+t_stat
+```
+
+Complete the following sentence by rounding the t-stat to the nearest whole number:
+
+> The observed mean is about ?? standard errors away from the parameter, 10.  
+
+
+## Using `t.test()`
+
+```{r}
+t.test(x = jackson_five$time, 
+       mu = 10)
+```
+Verify that our t-stat matches the t.test result.
+
+> Does it match? Y/N
+
+
+Is this standardized statistic, the t-statistic, large enough to justify rejecting the null if my alpha level is .05 (you can look at the p-value too).  
+
+> Yes/No
+
+If my alpha level is .01
+
+> Yes/No
+
+
+# Confidence intervals
+
+Provide the definition of a confidence interval that the book gives here.  
+
+> 
