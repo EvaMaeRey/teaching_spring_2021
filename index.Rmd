@@ -12,6 +12,11 @@ Slides:
 - [lesson 06](ma206_lesson_06.html){target="_blank"}
 - [lesson 07](ma206_lesson_07.html){target="_blank"}
 
+```{r, echo = F}
+knitr::include_url("ma206_lesson_07.html")
+```
+
+
 
 
 Exercises:
