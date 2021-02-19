@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ma206_lesson_10.utf8</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1509817177816-ca503fa03f60?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80)
+background-size: cover
+
+# .Large[central limit theorem and confidence intervals]
+
+## .small[MA206]
+#### .tiny[Dr. Evangeline Reynolds | Meeting 10 | 2021-02-08 | Image credit: Sam Goodgame, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+
+
+
+
+
+
+
+&lt;!-- &lt;img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Hinman_collator.jpg" width="150px"/&gt; --&gt;
+
+
+
+---
+
+
+
+
+
+
+
+---
+
+
+
+# Housekeeping
+
+  - submit prop.test/t.test in Teams
+  - Exploration Exercise #2
+  - Video
+  - Attendance
+
+---
+
+# Agenda
+
+  - Talk about Central limit theorem
+  - Return to t.test
+  - Talk confidence intervals
+
+
+
+
+---
+name: cosmic
+class: inverse
+background-image: url(https://images.unsplash.com/photo-1509817177816-ca503fa03f60?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80)
+background-size: cover
+
+### I know of scarcely anything so apt to impress the imagination as the wonderful form of cosmic order expressed by the "Law of Frequency of Error". The law would have been personified by the Greeks and deified, if they had known of it. It reigns with serenity and in complete self-effacement, amidst the wildest confusion. The huger the mob, and the greater the apparent anarchy, the more perfect is its sway. It is the supreme law of Unreason. Whenever a large sample of chaotic elements are taken in hand and marshalled in the order of their magnitude, an unsuspected and most beautiful form of regularity proves to have been latent all along. - Galton
+
+---
+
+&lt;div class="figure"&gt;
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Karl_Pearson%3B_Sir_Francis_Galton.jpg/800px-Karl_Pearson%3B_Sir_Francis_Galton.jpg" alt="Pearson and Galton." width="50%" /&gt;
+&lt;p class="caption"&gt;Pearson and Galton.&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+
+&lt;div class="figure"&gt;
+&lt;img src="https://thumbs.gfycat.com/QuaintTidyCockatiel-size_restricted.gif" alt="Galton Board toy" width="80%" /&gt;
+&lt;p class="caption"&gt;Galton Board toy&lt;/p&gt;
+&lt;/div&gt;
+
+---
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Galton_box.jpg/800px-Galton_box.jpg" width="40%" /&gt;&lt;img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Galton-Brett.svg" width="40%" /&gt;
+
+
+---
+
+&gt; The central limit theorem (CLT) establishes that, in many situations, when independent random variables are added, 
+--
+their mean tends **toward** a normal distribution
+--
+*even if the original variables themselves are not normally distributed*. 
+
+---
+
+
+https://evamaerey.github.io/statistics/central_limit_theorem.html
+
+---
+
+## Implications:
+
+--
+
+### If we take a simple random sample from a population, we can do a pretty good job of  *estimating* the mean for the population, `\(\mu\)`.
+
+--
+
+### ... and we have clear expectations about how far off we might be from the true population mean
+
+
+
+---
+
+# "Toward a normal distribution"
+
+--
+
+### t-distribution is also bell shaped, but more weight in the tails.  t.test gets it's name from the t-distribution
+
+--
+
+### discovered/developed by Guinness Brewing statistician William Sealy Gosset!
+
+---
+
+
+&lt;div class="figure"&gt;
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/4/42/William_Sealy_Gosset.jpg" alt="Gosset" width="50%" /&gt;
+&lt;p class="caption"&gt;Gosset&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+
+
+
+&lt;div class="figure"&gt;
+&lt;img src="https://media.geeksforgeeks.org/wp-content/uploads/20200525113955/f126.png" alt="media.geeksforgeeks.org" width="70%" /&gt;
+&lt;p class="caption"&gt;media.geeksforgeeks.org&lt;/p&gt;
+&lt;/div&gt;
+
+---
+
+# Walk through the rest of .Rmd exercise
+
+---
+
+# Confidence interval formal definition
+
+--
+
+The 95% confidence interval is the interval that will encompass the population parameter, 95 in 100 times when calculated for repeated samples.
+
+---
+
+Usually we just have one sample.  
+
+--
+
+If I calculate the 95% confidence interval for my single sample, the true mean probably lies in that interval, but I must acknowledge I might have, by chance, on of the "bad samples" -- the 5 in 100 times when my interval doesn't encompass the true population mean.
+
+---
+
+### Complete the mathematical definition:
+
+The 99% confidence interval is the interval that will encompass the population parameter, __ in 100 times when calculated for repeated samples.
+
+--
+
+The 90% confidence interval is the interval that will encompass the population parameter, __ in 100 times when calculated for repeated samples.
+
+---
+
+Order the confidence intervals by width.  Replace "?" with greater than or less than
+
+--
+
+99% conf int width ? 95% conf int width ? 90% conf int width 
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

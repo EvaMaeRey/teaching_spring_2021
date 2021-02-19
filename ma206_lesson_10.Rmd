@@ -1,0 +1,211 @@
+---
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, xaringan-themer.css]
+    seal: false
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1509817177816-ca503fa03f60?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)
+background-size: cover
+
+# .Large[central limit theorem and confidence intervals]
+
+## .small[MA206]
+#### .tiny[Dr. Evangeline Reynolds | Meeting 10 | 2021-02-08 | Image credit: Sam Goodgame, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+```{r, echo = F}
+doc_type <- "pres"
+library(flipbookr)
+library(madlibs)
+```
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+
+xaringanthemer::mono_light(
+  base_color = "#4c5253",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Josefin Sans", "200", "200i"),
+  code_font_google   = google_font("Droid Mono"),
+  text_font_size = "1.2cm",
+  code_font_size = ".45cm")
+  
+```
+
+```{r, echo = F}
+knitr::opts_chunk$set(message = F, warning = F, comment = "", fig.height = 6, echo = F)
+```
+
+
+<!-- <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Hinman_collator.jpg" width="150px"/> -->
+
+
+
+---
+
+
+```{r}
+# knitr::include_graphics("images_for_lecture/pearson_and_galton.jpg")
+```
+
+
+
+
+---
+
+
+
+# Housekeeping
+
+  - submit prop.test/t.test in Teams
+  - Exploration Exercise #2
+  - Video
+  - Attendance
+
+---
+
+# Agenda
+
+  - Talk about Central limit theorem
+  - Return to t.test
+  - Talk confidence intervals
+
+
+
+
+---
+name: cosmic
+class: inverse
+background-image: url(https://images.unsplash.com/photo-1509817177816-ca503fa03f60?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)
+background-size: cover
+
+### I know of scarcely anything so apt to impress the imagination as the wonderful form of cosmic order expressed by the "Law of Frequency of Error". The law would have been personified by the Greeks and deified, if they had known of it. It reigns with serenity and in complete self-effacement, amidst the wildest confusion. The huger the mob, and the greater the apparent anarchy, the more perfect is its sway. It is the supreme law of Unreason. Whenever a large sample of chaotic elements are taken in hand and marshalled in the order of their magnitude, an unsuspected and most beautiful form of regularity proves to have been latent all along. - Galton
+
+---
+
+```{r, echo=FALSE, out.width="50%", fig.cap="Pearson and Galton."}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Karl_Pearson%3B_Sir_Francis_Galton.jpg/800px-Karl_Pearson%3B_Sir_Francis_Galton.jpg")
+```
+
+
+---
+
+```{r, out.width="80%", fig.cap="Galton Board toy"}
+knitr::include_graphics("https://thumbs.gfycat.com/QuaintTidyCockatiel-size_restricted.gif")
+```
+
+---
+
+```{r, out.width="40%", fig.show='hold'}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Galton_box.jpg/800px-Galton_box.jpg")
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/b/bf/Galton-Brett.svg")
+```
+
+
+---
+
+> The central limit theorem (CLT) establishes that, in many situations, when independent random variables are added, 
+--
+their mean tends **toward** a normal distribution
+--
+*even if the original variables themselves are not normally distributed*. 
+
+---
+
+
+https://evamaerey.github.io/statistics/central_limit_theorem.html
+
+---
+
+## Implications:
+
+--
+
+### If we take a simple random sample from a population, we can do a pretty good job of  *estimating* the mean for the population, $\mu$.
+
+--
+
+### ... and we have clear expectations about how far off we might be from the true population mean
+
+
+
+---
+
+# "Toward a normal distribution"
+
+--
+
+### t-distribution is also bell shaped, but more weight in the tails.  t.test gets it's name from the t-distribution
+
+--
+
+### discovered/developed by Guinness Brewing statistician William Sealy Gosset!
+
+---
+
+
+```{r, echo=FALSE, out.width="50%", fig.cap="Gosset"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/4/42/William_Sealy_Gosset.jpg")
+```
+
+
+---
+
+
+
+```{r, echo=FALSE, out.width="70%", fig.cap="media.geeksforgeeks.org"}
+knitr::include_graphics("https://media.geeksforgeeks.org/wp-content/uploads/20200525113955/f126.png")
+```
+
+---
+
+# Walk through the rest of .Rmd exercise
+
+---
+
+# Confidence interval formal definition
+
+--
+
+The 95% confidence interval is the interval that will encompass the population parameter, 95 in 100 times when calculated for repeated samples.
+
+---
+
+Usually we just have one sample.  
+
+--
+
+If I calculate the 95% confidence interval for my single sample, the true mean probably lies in that interval, but I must acknowledge I might have, by chance, on of the "bad samples" -- the 5 in 100 times when my interval doesn't encompass the true population mean.
+
+---
+
+### Complete the mathematical definition:
+
+The 99% confidence interval is the interval that will encompass the population parameter, __ in 100 times when calculated for repeated samples.
+
+--
+
+The 90% confidence interval is the interval that will encompass the population parameter, __ in 100 times when calculated for repeated samples.
+
+---
+
+Order the confidence intervals by width.  Replace "?" with greater than or less than
+
+--
+
+99% conf int width ? 95% conf int width ? 90% conf int width 
+
