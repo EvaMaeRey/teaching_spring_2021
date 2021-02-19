@@ -12,7 +12,7 @@ Slides:
 - [lesson 06](ma206_lesson_06.html){target="_blank"}
 - [lesson 07](ma206_lesson_07.html){target="_blank"}
 
-- [lesson 10 - central limit theorem and confidence intervals](ma206_lesson_07.html){target="_blank"}
+- [lesson 10 - central limit theorem and confidence intervals](ma206_lesson_10.html){target="_blank"}
 
 
 
