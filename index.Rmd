@@ -13,6 +13,7 @@ Slides:
 - [lesson 07](ma206_lesson_07.html){target="_blank"}
 
 - [lesson 10 - central limit theorem and confidence intervals](ma206_lesson_10.html){target="_blank"}
+- [lesson 12 - association and causation](ma206_lesson_12.html){target="_blank"}
 
 
 
