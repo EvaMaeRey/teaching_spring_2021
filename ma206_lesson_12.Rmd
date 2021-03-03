@@ -122,7 +122,7 @@ If I calculate the 95% confidence interval for my single sample, the true mean p
 
 ---
 
-`r chunk_reveal("multittest", break_type = 20)`
+`r chunk_reveal("multittest", break_type = 20, widths = c(1,1))`
 
 
 ```{r multittest, include=F}
@@ -153,6 +153,12 @@ ggplot(tibble(height = runif(20))) +
   scale_x_continuous(limits = c(0, 1))
 ```
 
+---
+class: inverse, center, middle
+
+# Laymans definition:  I'm 95% confident that the true value is in this interval
+
+
 
 ---
 class: inverse, middle, center
@@ -180,13 +186,14 @@ class: inverse, middle, center
 library(tidyverse)
 library(gapminder)
 
-gm_2007 <- gapminder %>% filter(year == 2007)
+gm_2007 <- gapminder %>% 
+  filter(year == 2007)
 ```
 
 
 ---
 
-`r chunk_reveal("scatter1")`
+`r chunk_reveal("scatter1",widths = c(1,1))`
 
 ```{r scatter1, include = F}
 ggplot(data = gm_2007) +
@@ -214,7 +221,7 @@ class: inverse, middle, center
 
 ---
 
-`r chunk_reveal("twoway")`
+`r chunk_reveal("twoway",widths = c(1,1))`
 
 
 ```{r twoway, include = F}
@@ -238,13 +245,14 @@ buzz_plot
 dolphin_experiment %>% 
   # select to only the vars of interest
   select(signal, buzz_lever) %>% 
-  table()
+  table() %>% 
+  plot()
 ```
 
 
 ---
 
-`r chunk_reveal("survive")`
+`r chunk_reveal("survive", widths = c(1,1))`
 
 ```{r survive, include=F}
 Titanic %>%
@@ -264,8 +272,41 @@ titanic_plot
 
 titanic_raw_data %>% 
   select(Sex, Survived) %>% 
-  table()
+  table() %>% 
+  plot()
 ```
+
+---
+
+
+`r chunk_reveal("survive2",widths = c(1,1))`
+
+```{r survive2, include=F}
+Titanic %>%
+  as.data.frame() %>%
+  uncount(weights = Freq) ->
+titanic_raw_data
+
+ggplot(data = 
+         titanic_raw_data) +
+  theme_minimal(base_size = 30) +
+  aes(x = Sex) +
+  aes(fill = Survived) +
+  geom_bar() ->
+simple_bar
+
+ggplot(data = titanic_raw_data) +
+  theme_minimal(base_size = 30) +
+  aes(x = Sex) +
+  aes(fill = Survived) +
+  geom_bar(position = "fill") ->
+proportion_bar
+```
+
+---
+
+
+
 
 ---
 class: middle, center, inverse
@@ -274,7 +315,9 @@ class: middle, center, inverse
 
 ---
 
-```{r}
+`r chunk_reveal("boxplot",widths = c(1,1))`
+
+```{r boxplot, include = F}
 faithful %>% 
   mutate(duration_type = 
            case_when(eruptions > 3 ~ "long",
@@ -282,6 +325,7 @@ faithful %>%
 faithful_prep
 
 ggplot(faithful_prep) +
+  theme_minimal(base_size = 25) +
   aes(x = duration_type) +
   aes(y = waiting) +
   geom_jitter(width = .2,
@@ -394,8 +438,9 @@ $BloodPressure_(Joe) | drug$ and $BloodPressure_(Joe) | placebo$
 What is the treatment effect:
 
 --
-$(BloodPressure_(Joe) | drug) - $
-$(BloodPressure_(Joe) | placebo)$
+$$(BloodPressure_(Joe) | drug) -$$
+
+$$(BloodPressure_(Joe) | placebo)$$
 
 
 ---
@@ -409,7 +454,36 @@ $(BloodPressure_(Joe) | placebo)$
 (Just as the traveler in the poem cannot take both paths!)
 
 ![](./images_for_lecture/joe_treatment_control.png)
+---
 
+
+
+|                | Treatment | Control       | Causal Effect  (T-C)        |
+| ----------- | ----------- | ----------- | ----------- |
+| Joe            |        3              | ?                    | 3-?         |
+| Amy            | ?                    |       9               | ?-9       |
+| Fred           | ?                    |       12               | ?-12                    |
+| Angela         |         4             | ?                    | 4-?          |
+| Chris          | ?                    |        9      | ?-9                        |
+| Tim            |        7              | ?                    | 7-?                        |
+| Roger          |         6             | ?                    | 6-?                        |
+| **Average**        | **5**    | **10** | **5 - 10** |
+
+
+---
+class: inverse
+
+
+# "Random assignment helps balance out potential confounding variables among the explanatory variable groups, giving us cause-and-effect conclusions" 
+
+
+---
+
+## Do you think this study is "underpowered"? 
+
+--
+
+Remember statistical power speaks to whether a study is able to uncover a statistically significant result.  Small numbers of observations in studies often lead them to be "underpowered".
 
 
 ---
@@ -439,12 +513,57 @@ RCT - Randomized control trial.
 The **gold standard** for causal inference
 
 --
-Let's us compare averages of groups of people (observational units) -- each of which has equal opportunity to be in the control or treatment group.  
+Let's us compare averages of groups of people (observational units) -- each of which has opportunity to be in the control or treatment group; random assignment determines which group they are in. 
 
 
 ---
 
 # Which problematic causal pathways are eliminated using RCT?
+
+---
+class: inverse, center, middle
+
+# Hey, we talked about random sampling before?  
+--
+Is that the same thing as random assignment (in a randomized control trial experiment)?
+--
+
+No.
+
+---
+class: center, middle
+
+# Random Sampling 
+--
+let's me generalize to a larger population
+--
+to estimate a population parameter(s)
+
+---
+class: center, middle
+
+
+## Random Assignment 
+--
+helps me establish causality 
+--
+by giving me exogenous variation 
+--
+i.e. eliminating other problematic pathways (confounding)
+
+---
+class: center, middle
+
+### Which is an *observational study* and with is *a Randomized control trial*?
+
+--
+
+### I take a simple randomly sample 150 students from NY private high schools and 200 from a public school and look at the difference in those groups ACT scores.  Do the groups, on average, score differently?
+
+--
+
+### I have a large grant to study the effect of private schooling.  From a set of students, I'm able to randomly select some send those to private school for a year.  I compare how the two groups do on ACT after that period. 
+
 
 ---
 
