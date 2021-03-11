@@ -1,6 +1,6 @@
 ---
 title: "two-proportion z-test"
-author: "Dr Reynolds"
+author: "Dr. Reynolds"
 subtitle: "theory based approach"
 ---
 
