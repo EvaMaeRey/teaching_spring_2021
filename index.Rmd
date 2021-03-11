@@ -22,6 +22,6 @@ Slides:
 Exercises:
 
 -   [lesson_09.Rmd](lesson_9.Rmd) & [html preview](lesson_9.html)
--   [lesson_15_two_proportions.Rmd](lesson_15_two_proportions.Rmd) & [html preview](lesson_15_two_proportions.html)
+-   [lesson_15_two_proportions.Rmd](lesson_15_two_proportions.rmd) & [html preview](lesson_15_two_proportions.html)
 
 
