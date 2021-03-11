@@ -1,0 +1,110 @@
+
+
+```{r, setup = T, include=F}
+library(tidyverse)
+```
+
+
+```{r}
+read_csv(file = "https://raw.githubusercontent.com/EvaMaeRey/teaching_spring_2021/master/data/chap5.GoodandBad.csv") %>% 
+  rename(wording = Wording) %>% 
+  rename(perception = Perception) ->
+  good_bad
+
+good_bad
+```
+
+
+
+```{r}
+good_bad %>% 
+  table() 
+```
+
+
+```{r}
+good_bad %>% 
+  table() %>% 
+  plot()
+```
+
+```{r}
+ggplot(data = good_bad) +
+  aes(x = wording) +
+  geom_bar() + 
+  aes(fill = perception)
+```
+
+
+
+```{r}
+ggplot(data = good_bad) +
+  aes(x = wording) +
+  geom_bar(position = "fill") + 
+  aes(fill = perception)
+```
+
+
+
+```{r}
+ggplot(data = good_bad) +
+  aes(x = "ignoring wording") +
+  geom_bar(position = "fill") + 
+  aes(fill = perception)
+```
+
+
+
+# theory based approach - How to conduct a two-proportion z-test
+
+
+## step 1: Statistic
+
+$$
+\hat{p}_1 - \hat{p}_2
+$$
+Use r as a calculator:
+
+```{r}
+
+```
+
+
+## step 2: Standardized statistic - z score, it is hyphthesized that there is no difference ()
+
+
+$$
+z = \frac{observed~statistic-hypothesized~value}{standard~error~of~statistic}
+$$
+
+Or
+
+$$
+z = \frac{(\hat{p}_1 - \hat{p}_2)-0}{\sqrt{\hat{p}(1-\hat{p})*(\frac{1}{n_1}+\frac{1}{n_2})}}
+$$
+
+Show that the calculated z score is 4.30 by using R as a calculator below
+
+
+```{r}
+
+```
+
+
+
+##
+
+Calculate Confidence interval
+
+
+```{r}
+
+```
+
+
+$$
+statistic \pm multiplier * SD~of~statistic
+$$
+
+
+

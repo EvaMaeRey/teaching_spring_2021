@@ -171,6 +171,11 @@ p-value
 = .001
 
 ---
+class: inverse, center, middle
+
+# p is for probability in p-value
+
+---
 
 # p-value: How often 
 --
@@ -208,8 +213,20 @@ and accept the alternative hypothesis
 --
 $H_A$
 
+---
 
+$H_0: \pi = .5$
+$H_a: \pi \ne .5$
 
+--
+
+$H_0: \pi <= .75$
+$H_a: \pi > .75$
+
+--
+
+$H_0: \pi >= .55$
+$H_a: \pi < .55$
 
 ---
 

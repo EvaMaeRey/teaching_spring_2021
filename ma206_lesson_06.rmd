@@ -194,17 +194,11 @@ $$H_A$$
 
 ---
 
-# Calculating the Z statistic
+# Calculating the Z statistic - for the One-proportion z test
 
 z = (observed - average of chance model) / standard deviation
 
 
----
-
-# General formula for Standard Deviation
-
-
-$$ \sigma = \sqrt\frac{\sum_{i=1}^{n}(x_i - \mu)^2} {n-1} $$
 
 
 ---

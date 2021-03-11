@@ -163,28 +163,10 @@ titanic_raw_data %>%
 
 
 
-`r chunk_reveal("survive")`
 
-```{r survive, include=F}
-Titanic %>%
-  as.data.frame() %>%
-  uncount(weights = Freq) ->
-titanic_raw_data
 
-ggplot(data = titanic_raw_data) +
-  theme_minimal(base_size = 30) +
-  aes(x = Sex) +
-  aes(fill = Survived) +
-  geom_bar() ->
-simple_bar
 
-ggplot(data = titanic_raw_data) +
-  theme_minimal(base_size = 30) +
-  aes(x = Sex) +
-  aes(fill = Survived) +
-  geom_bar(position = "fill") ->
-proportion_bar
-```
+
 
 ---
 
