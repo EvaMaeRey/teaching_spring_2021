@@ -37,7 +37,7 @@ There are a **large** number of ways to represent associations between two binar
 
 ## First representation
 
-What's the name of this first representation?
+What's the name of this first representation?  
 
 > your answer (choose 1) contingency table (or 2X2 table), stacked bar chart, dodged bar chart, mosaic plot/variable widths bar plot, segmented bar chart (book uses a lot)
 
