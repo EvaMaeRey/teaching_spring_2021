@@ -1,3 +1,14 @@
+---
+title: "two-proportion z-test"
+author: "Dr Reynolds"
+subtitle: "theory based approach"
+---
+
+In this section, we want to know:  for two different groups, is there a difference in the proportion for another variable.
+
+Let's consider a case: **An experiment is run where people are basically asked "how are things going in your life this year?", but wording is slightly different: 1) "Are you having a good year?" 2) "Are you having a bad year?".  Their responses are classified as "positive" or "negative".** 
+
+Let's answer the question:  **Is there evidence that there is an association (relationship) between the way the question is asked and how people respond**
 
 
 ```{r, setup = T, include=F}
@@ -5,21 +16,42 @@ library(tidyverse)
 ```
 
 
-```{r}
+```{r, message=F}
 read_csv(file = "https://raw.githubusercontent.com/EvaMaeRey/teaching_spring_2021/master/data/chap5.GoodandBad.csv") %>% 
-  rename(wording = Wording) %>% 
+  rename(wording = Wording) %>% # getting to "snake case" all lower w/ underscores
   rename(perception = Perception) ->
-  good_bad
+good_bad
 
 good_bad
 ```
 
+# Part 1. Representing bivariate (two variable), binary (two categories) associations
+
+There are a **large** number of ways to represent associations between two binary variables.
+
+- contingency table (or 2X2 table)
+- stacked bar chart
+- dodged bar chart
+- mosaic plot/variable widths bar plot
+- segmented bar chart (book uses a lot)
+
+## First representation
+
+What's the name of this first representation?
+
+> your answer (choose 1) contingency table (or 2X2 table), stacked bar chart, dodged bar chart, mosaic plot/variable widths bar plot, segmented bar chart (book uses a lot)
 
 
 ```{r}
 good_bad %>% 
   table() 
 ```
+
+## Second representation
+
+We can pipe the above table to plot() and get a visualization. What's it called:
+
+> your answer (choose 1) contingency table (or 2X2 table), stacked bar chart, dodged bar chart, mosaic plot/variable widths bar plot, segmented bar chart (book uses a lot)
 
 
 ```{r}
@@ -28,14 +60,36 @@ good_bad %>%
   plot()
 ```
 
+## Third and fourth representations
+
+A more common representations (in newspapers) are below...
+
+Which do you think those are called?
+
+> your answer (choose 2) contingency table (or 2X2 table), stacked bar chart, dodged bar chart, mosaic plot/variable widths bar plot, segmented bar chart (book uses a lot)
+
+
 ```{r}
 ggplot(data = good_bad) +
   aes(x = wording) +
   geom_bar() + 
   aes(fill = perception)
+
+ggplot(data = good_bad) +
+  aes(x = wording) +
+  geom_bar(position = "dodge") + 
+  aes(fill = perception)
 ```
 
+## Fifth representation used a lot in the book
 
+We see a lot of this one in the book.  What's its name?
+
+> your answer (choose 1) contingency table (or 2X2 table), stacked bar chart, dodged bar chart, mosaic plot/variable widths bar plot, segmented bar chart (book uses a lot)
+
+Using the visualization, eyeball the difference in proportions.
+
+> your answer ...
 
 ```{r}
 ggplot(data = good_bad) +
@@ -44,6 +98,19 @@ ggplot(data = good_bad) +
   aes(fill = perception)
 ```
 
+
+
+
+
+## Pooled proportion
+
+Below, we *ignore the grouping information*, looking at the overall proportion (pooled proportion) across both groups.
+
+Estimate the pooled proportion based on the data visualization:
+
+> your answer
+
+This proportion is used in the calculation of the SE for the null distribution.
 
 
 ```{r}
@@ -55,22 +122,66 @@ ggplot(data = good_bad) +
 
 
 
-# theory based approach - How to conduct a two-proportion z-test
+# Part 2. Theory based approach - How to conduct a **two-proportion z-test**
 
 
-## step 1: Statistic
+## Step 1: Statistic: difference in proportions
+
+Our statistic is the difference in proportions for between the two groups. 
 
 $$
 \hat{p}_1 - \hat{p}_2
 $$
-Use r as a calculator:
+
+Hide the definition above from yourself, and look only at the formula, try to describe the statistic in words:
+
+> your answer
+
+Look at the contingency table...
+
+```{r}
+good_bad %>% 
+  table() 
+```
+
+
+... and use r as a calculator to calculate the value of the statistic, phat-1 (good year condition) minus phat-2 (bad year condition).  
 
 ```{r}
 
 ```
 
 
-## step 2: Standardized statistic - z score, it is hyphthesized that there is no difference ()
+## Step 2: Characterize the distribution for the null
+
+What are differences in proportions for the two groups that might have arisen *just by chance*? 
+
+Standardized statistic - z score, it is hypothesized that there is usually that no difference in the proportions (pi) for these groups.  
+
+$$
+H_0: \pi_{good~framing}- \pi_{bad~framing} = 0
+$$
+
+$$
+H_A: \pi_{good~framing}- \pi_{bad~framing} \ne 0
+$$
+
+Another way we describe $H_0$ this is that the variables are **statistically independent**, i.e. *knowing the value of one var doesn't tell you information about the other variable*.  
+
+This is in contrast to **statistical dependence** -- *there is a real association between the variables*, or $H_A$ (specifically the not equal case). 
+
+If we have enough evidence for **statistical dependence** (i.e. p-value < alpha) -- we can say the relationship is **statistically significant**!  Yea!
+
+$$
+SE = \sqrt{\hat{p}(1-\hat{p})*(\frac{1}{n_1}+\frac{1}{n_2})}
+$$
+
+Looking at the equation above use R as a calculator to calculate the standard error (SE) - the expected spread (variability) consistent with no relationship (chance model); the spread is centered at zero (no difference in proportions). 
+
+```{r}
+
+```
+
 
 
 $$
@@ -83,28 +194,67 @@ $$
 z = \frac{(\hat{p}_1 - \hat{p}_2)-0}{\sqrt{\hat{p}(1-\hat{p})*(\frac{1}{n_1}+\frac{1}{n_2})}}
 $$
 
-Show that the calculated z score is 4.30 by using R as a calculator below
+## Step 3a: Strength of evidence - zscore
 
+Is what I observe (phat1 - phat2) consistent with the null?  Is it far enough away from the null, such that I'd say it is inconsistent? 
+
+First we express this as a z-score. 
+
+Show that the calculated z score is 4.30 by using R as a calculator below.  The course guide says that it will! 
 
 ```{r}
+# my calculation
 
 ```
 
 
 
-##
+## Step 3b: Translate to z-score to pvalue 
 
-Calculate Confidence interval
 
+Use `pnorm` to translate from z-score to pvalue, using only the appropriate r code (delete the 'comment character #' at the *beginning* of the line of code).  Replace the value of z with what we calculated above, or use assignment to create z above. 
 
 ```{r}
-
+# 1 - pnorm(z) # greater than
+# pnorm(z) # less than
+# 2*(1-abs(pnorm(z))) # two sided
 ```
 
 
+# Part 2. Pause. Wait a second!  Have we met the theory based validity conditions?
+
+The validity condition for the theory based approach -- the two proportion z-test -- is that **at least 10 observations in each cell of 2X2, contingency table**.  Are the validity conditions met? Are we okay using this elegant mathematical (theory) approach, or should we kick it back to the computationally intensive simulation approach? 
+
+```{r}
+good_bad %>% 
+  table() 
+```
+
+
+> your answer
+
+
+
+## Part 3. Confidence interval
+
+Note: the SE for the confidence interval is **different** than for the overall two-proportion z-test.  There is no pooling!  We see just group proportions.
+
+
 $$
-statistic \pm multiplier * SD~of~statistic
+SE = \sqrt{\frac{\hat{p_1}(1-\hat{p_1})}{n_1}+\frac{\hat{p_2}(1-\hat{p_2})}{n_2}}
 $$
 
+
+
+$$
+statistic \pm multiplier * SE~of~statistic
+$$
+
+
+Multiplier  (Confidence level)
+
+* 1.645     (90%)
+* 1.960     (95%)
+* 2.57      (99%)
 
 
