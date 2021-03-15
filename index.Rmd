@@ -19,6 +19,8 @@ Slides:
 
 -  [lesson 13 - difference in proportions: SSS and Theory](ma206_lesson_13.html){target="_blank"}
 
+- [lesson 16 - two group difference in proportions, two group difference in means](ma206_lesson_16.html){target="_blank"}
+
 Exercises:
 
 -   [lesson_09.Rmd](lesson_9.Rmd) & [html preview](lesson_9.html)
