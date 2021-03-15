@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ma206_lesson_16.utf8</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1502159212845-f31a19546a5d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1500&amp;q=80)
+background-size: cover
+
+# .Large[Evidence for differences between two groups?]
+
+## .small[MA206]
+#### .tiny[Dr. Evangeline Reynolds | Meeting 16 | 2021-03-14 | Image credit: Nathan Fertig, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+
+
+```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
+```
+
+```
+## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.0.4     ✓ dplyr   1.0.2
+## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.6.2
+```
+
+```
+## Warning: package 'tibble' was built under R version 3.6.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.6.2
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.6.2
+```
+
+```
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+
+
+
+
+
+&lt;!-- &lt;img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Hinman_collator.jpg" width="150px"/&gt; --&gt;
+
+---
+
+# Is there evidence that proportions are different for two groups 
+--
+
+# Is there evidence that central tendancy (means) are different for two groups
+
+
+---
+
+# Agenda
+
+
+---
+
+# Housekeeping
+
+  - Start Video
+  - Attendance
+  - diff in proportions SSS reveiw
+  - diff in means SSS (new)
+  - class experiment (heart rate)
+  - Wednesday: Theory based prop wrap up and ttest new.
+
+---
+
+# Are the proportions of an outcome for two groups different? 
+
+---
+
+count: false
+ 
+
+.panel1-readdata-1[
+
+```r
+library(tidyverse)
+read_csv(file = "https://raw.githubusercontent.com/EvaMaeRey/teaching_spring_2021/master/data/chap5.GoodandBad.csv") %&gt;%
+  rename(wording = Wording) %&gt;%  # getting to "snake case" all lower w/ underscores
+  rename(perception = Perception) -&gt;
+good_bad
+
+good_bad %&gt;%
+  table()
+```
+]
+ 
+.panel2-readdata-1[
+
+```
+          perception
+wording    negative positive
+  badyear         8        4
+  goodyear        3       15
+```
+]
+
+&lt;style&gt;
+.panel1-readdata-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-readdata-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-readdata-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups `\(\hat{p}_1 - \hat{p}_2\)` 
+
+
+---
+
+count: false
+ 
+
+.panel1-bar-1[
+
+```r
+good_bad %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey") +
+  aes(group = group) +
+  labs(title = "Observed data") +
+  labs(subtitle = "Stacked bar chart")
+```
+]
+ 
+.panel2-bar-1[
+![](ma206_lesson_16_files/figure-html/bar_1_01_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-bar-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-bar-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-bar-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-propdiff-1[
+
+```r
+good_bad %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Observed data") +
+  labs(subtitle = "Segmented bar chart")
+```
+]
+ 
+.panel2-propdiff-1[
+![](ma206_lesson_16_files/figure-html/propdiff_1_01_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-propdiff-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-propdiff-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-propdiff-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups `\(\hat{p}_1 - \hat{p}_2\)` 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been `\(\hat{p}_1 - \hat{p}_2\)` differences in proportions observed by chance through simulation
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_19_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-shuffle-20[
+
+```r
+good_bad %&gt;%
+# breaking relationship
+# sample function shuffles the
+# order of the perception var
+  mutate(perception =
+           sample(perception)) %&gt;%
+  arrange(perception) %&gt;%
+  mutate(group = 1:n()) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+]
+ 
+.panel2-shuffle-20[
+![](ma206_lesson_16_files/figure-html/shuffle_20_20_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-shuffle-20 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-shuffle-20 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-shuffle-20 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups `\(\hat{p}_1 - \hat{p}_2\)` 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been `\(\hat{p}_1 - \hat{p}_2\)` differences in proportions observed by chance through simulation
+
+--
+### Step 3: *strength of the evidence (against null)*
+--
+Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
+
+
+
+
+
+
+---
+
+
+---
+
+# Are the means of an outcome for two groups different? (quantitative outcome)
+
+---
+
+count: false
+ 
+
+.panel1-readdatafeeding-1[
+
+```r
+library(tidyverse)
+read_csv(file = "data/chap6.BreastFeedIntell.csv") -&gt;
+BreastFeedIntell
+```
+]
+ 
+.panel2-readdatafeeding-1[
+
+]
+
+&lt;style&gt;
+.panel1-readdatafeeding-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-readdatafeeding-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-readdatafeeding-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+# Two-means SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups `\(\bar{x}_1 - \bar{x}_2\)` 
+
+
+---
+
+count: false
+ 
+
+.panel1-boxplot-1[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Observed data") +
+  labs(subtitle = "GCI v. Feeding condition")
+```
+]
+ 
+.panel2-boxplot-1[
+![](ma206_lesson_16_files/figure-html/boxplot_1_01_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-boxplot-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-boxplot-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-boxplot-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups `\(\hat{p}_1 - \hat{p}_2\)` 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been `\(\hat{p}_1 - \hat{p}_2\)` differences in proportions observed by chance through simulation
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_19_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiff-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+]
+ 
+.panel2-meandiff-20[
+![](ma206_lesson_16_files/figure-html/meandiff_20_20_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-meandiff-20 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-meandiff-20 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-meandiff-20 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups `\(\bar{x}_1 - \bar{x}_2\)` 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been `\(\bar{x}_1 - \bar{x}_2\)` differences in proportions observed by chance through simulation
+
+--
+### Step 3: *strength of the evidence (against null)*
+--
+Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
+
+
+
+---
+
+Theory based approach (preview)
+
+
+
+```r
+t.test(GCI ~ Feeding, 
+       data = BreastFeedIntell,
+       alternative = "two.sided",
+       conf.level = .95,
+       mu = 0)
+```
+
+```
+
+	Welch Two Sample t-test
+
+data:  GCI by Feeding
+t = 2.4624, df = 153.01, p-value = 0.01491
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.8698749 7.9302245
+sample estimates:
+   mean in group Breastfed mean in group NotBreastfed 
+                     105.3                      100.9 
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,365 @@
+---
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, xaringan-themer.css]
+    seal: false
+    nature:
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+class: inverse, left, bottom
+background-image: url(https://images.unsplash.com/photo-1502159212845-f31a19546a5d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80)
+background-size: cover
+
+# .Large[Evidence for differences between two groups?]
+
+## .small[MA206]
+#### .tiny[Dr. Evangeline Reynolds | Meeting 16 | 2021-03-14 | Image credit: Nathan Fertig, Upsplash]
+
+
+???
+
+Title slide
+
+
+
+
+```{r, echo = F}
+doc_type <- "pres"
+library(flipbookr)
+library(tidyverse)
+library(madlibs)
+```
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+
+xaringanthemer::mono_light(
+  base_color = "#4c5253",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Josefin Sans", "200", "200i"),
+  code_font_google   = google_font("Droid Mono"),
+  text_font_size = "1.2cm",
+  code_font_size = ".45cm")
+  
+```
+
+```{r, echo = F}
+knitr::opts_chunk$set(message = F, warning = F, comment = "", fig.height = 6, echo = F)
+```
+
+
+<!-- <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Hinman_collator.jpg" width="150px"/> -->
+
+---
+
+# Is there evidence that proportions are different for two groups 
+--
+
+# Is there evidence that central tendancy (means) are different for two groups
+
+
+---
+
+# Agenda
+
+
+---
+
+# Housekeeping
+
+  - Start Video
+  - Attendance
+  - diff in proportions SSS reveiw
+  - diff in means SSS (new)
+  - class experiment (heart rate)
+  - Wednesday: Theory based prop wrap up and ttest new.
+
+---
+
+# Are the proportions of an outcome for two groups different? 
+
+---
+
+`r chunk_reveal("readdata", break_type = 1)`
+
+```{r readdata, message=F, include=F}
+library(tidyverse)
+read_csv(file = "https://raw.githubusercontent.com/EvaMaeRey/teaching_spring_2021/master/data/chap5.GoodandBad.csv") %>% 
+  rename(wording = Wording) %>% # getting to "snake case" all lower w/ underscores
+  rename(perception = Perception) ->
+good_bad
+
+good_bad %>% 
+  table()
+```
+
+---
+class: inverse, middle, center
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups $\hat{p}_1 - \hat{p}_2$ 
+
+
+---
+
+`r chunk_reveal("bar", break_type = 1)`
+
+
+```{r bar, include=FALSE}
+good_bad %>% 
+  arrange(perception) %>% 
+  mutate(group = 1:n()) %>% 
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey") +
+  aes(group = group) +
+  labs(title = "Observed data") +
+  labs(subtitle = "Stacked bar chart")
+```
+
+---
+
+`r chunk_reveal("propdiff", break_type = 1)`
+
+
+```{r propdiff,include=F}
+good_bad %>% 
+  arrange(perception) %>% 
+  mutate(group = 1:n()) %>% 
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Observed data") +
+  labs(subtitle = "Segmented bar chart")
+```
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups $\hat{p}_1 - \hat{p}_2$ 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been $\hat{p}_1 - \hat{p}_2$ differences in proportions observed by chance through simulation
+
+
+
+
+---
+
+`r chunk_reveal("shuffle", break_type = 20)`
+
+```{r shuffle, include=F}
+good_bad %>% 
+  # breaking relationship 
+  # sample function shuffles the 
+  # order of the perception var
+  mutate(perception = 
+           sample(perception)) %>% 
+  arrange(perception) %>% 
+  mutate(group = 1:n()) %>% 
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = wording) +
+  aes(fill = perception) +
+  geom_bar(color = "grey",
+           position = "fill") +
+  aes(group = group) +
+  labs(title = "Might-have-been outcome") +
+  labs(subtitle = "If no true relationship between wording and perception")
+```
+
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups $\hat{p}_1 - \hat{p}_2$ 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been $\hat{p}_1 - \hat{p}_2$ differences in proportions observed by chance through simulation
+
+--
+### Step 3: *strength of the evidence (against null)*
+--
+Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
+
+
+
+
+
+
+---
+
+
+---
+
+# Are the means of an outcome for two groups different? (quantitative outcome)
+
+---
+
+`r chunk_reveal("readdatafeeding", break_type = 1)`
+
+```{r readdatafeeding, message=F, include=F}
+library(tidyverse)
+read_csv(file = "data/chap6.BreastFeedIntell.csv") ->
+BreastFeedIntell
+```
+
+---
+class: inverse, middle, center
+
+
+# Two-means SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups $\bar{x}_1 - \bar{x}_2$ 
+
+
+---
+
+`r chunk_reveal("boxplot", break_type = 1)`
+
+
+```{r boxplot, include=FALSE}
+BreastFeedIntell %>% 
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05, 
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean, 
+               geom = "point", 
+               col = "darkred", 
+               size = 5) +
+  labs(title = "Observed data") +
+  labs(subtitle = "GCI v. Feeding condition")
+```
+
+
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups $\hat{p}_1 - \hat{p}_2$ 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been $\hat{p}_1 - \hat{p}_2$ differences in proportions observed by chance through simulation
+
+
+
+
+---
+
+`r chunk_reveal("meandiff", break_type = 20)`
+
+
+```{r meandiff, include=F}
+BreastFeedIntell %>% 
+  mutate(GCI = sample(GCI)) %>% 
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05, 
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean, 
+               geom = "point", 
+               col = "darkred", 
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")
+```
+
+
+---
+class: inverse, middle
+
+
+# Two-proportion SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups $\bar{x}_1 - \bar{x}_2$ 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been $\bar{x}_1 - \bar{x}_2$ differences in proportions observed by chance through simulation
+
+--
+### Step 3: *strength of the evidence (against null)*
+--
+Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
+
+
+
+---
+
+Theory based approach (preview)
+
+
+```{r, echo = T}
+t.test(GCI ~ Feeding, 
+       data = BreastFeedIntell,
+       alternative = "two.sided",
+       conf.level = .95,
+       mu = 0)
+```
+
