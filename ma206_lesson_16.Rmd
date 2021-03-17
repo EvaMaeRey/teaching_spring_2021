@@ -537,3 +537,36 @@ BreastFeedIntell %>%
 ```
 
 
+---
+# One sample t-statistic
+
+$$t-statistic = \frac{\bar{x} - \mu}{SE}$$
+--
+
+Where
+
+$$SE = \frac{\sigma}{\sqrt{n}}$$
+
+--
+So 
+
+$$t-statistic = \frac{\bar{x} - \mu}{s/\sqrt{n}}$$
+
+
+---
+# Two sample t-test
+
+$$ 
+t = \frac{statistic - hypothesized~value}{SE}
+$$
+--
+
+hypothesized value, is $\mu_1-\mu_2 = 0 $, i.e. the groups have the same mean.  
+
+--
+
+Therefore
+
+$$
+t = \frac{\bar{x}_1 - \bar{x}_2 - 0}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}
+$$
