@@ -993,6 +993,10 @@ Answer the question: Is observed (Step 1) consistent with what's we expect under
 ---
 
 
+
+
+
+
 ---
 
 # Are the means of an outcome for two groups different? (quantitative outcome)
@@ -1127,19 +1131,19 @@ BreastFeedIntell %&gt;%
 class: inverse, middle
 
 
-# Two-proportion SSS
+# Two-mean SSS
 
 --
 
 ### Step 1: *statistic* 
 --
-calculate the difference in proportions between groups `\(\hat{p}_1 - \hat{p}_2\)` 
+calculate the difference in proportions between groups `\(\bar{x}_1 - \bar{x}_2\)` 
 
 --
 
 ### Step 2: *simulate* 
 --
-observe and collect might-have-been `\(\hat{p}_1 - \hat{p}_2\)` differences in proportions observed by chance through simulation
+observe and collect might-have-been `\(\bar{x}_1 - \bar{x}_2\)` differences in proportions observed by chance through simulation
 
 
 
@@ -1782,6 +1786,837 @@ BreastFeedIntell %&gt;%
 class: inverse, middle
 
 
+# Two-mean SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups `\(\bar{x}_1 - \bar{x}_2\)` 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been `\(\mu_1 - \mu_2\)` differences in proportions observed by chance through simulation
+
+--
+### Step 3: *strength of the evidence (against null)*
+--
+Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
+
+
+
+---
+
+# Zooming in... Are the means of an outcome for two groups different? (quantitative outcome)
+
+---
+
+count: false
+ 
+
+.panel1-readdatafeeding2-1[
+
+```r
+library(tidyverse)
+read_csv(file = "data/chap6.BreastFeedIntell.csv") -&gt;
+BreastFeedIntell
+```
+]
+ 
+.panel2-readdatafeeding2-1[
+
+]
+
+&lt;style&gt;
+.panel1-readdatafeeding2-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-readdatafeeding2-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-readdatafeeding2-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+# Two-means SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups `\(\bar{x}_1 - \bar{x}_2\)` 
+
+
+---
+
+count: false
+ 
+
+.panel1-boxplotzoom-1[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Observed data") +
+  labs(subtitle = "GCI v. Feeding condition") +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-boxplotzoom-1[
+![](ma206_lesson_16_files/figure-html/boxplotzoom_1_01_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-boxplotzoom-1 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-boxplotzoom-1 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-boxplotzoom-1 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+
+---
+class: inverse, middle
+
+
+# Two-mean SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups `\(\bar{x}_1 - \bar{x}_2\)` 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been$mu_1 - \mu_2$ differences in proportions observed by chance through simulation
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_12_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_13_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_14_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_15_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_16_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_17_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_18_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_19_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-meandiffzoom-20[
+
+```r
+BreastFeedIntell %&gt;%
+  mutate(GCI = sample(GCI)) %&gt;%
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05,
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "darkred",
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+]
+ 
+.panel2-meandiffzoom-20[
+![](ma206_lesson_16_files/figure-html/meandiffzoom_20_20_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-meandiffzoom-20 {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-meandiffzoom-20 {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-meandiffzoom-20 {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+---
+class: inverse, middle
+
+
 # Two-proportion SSS
 
 --
@@ -1794,13 +2629,12 @@ calculate the difference in *means* between groups `\(\bar{x}_1 - \bar{x}_2\)`
 
 ### Step 2: *simulate* 
 --
-observe and collect might-have-been `\(\bar{x}_1 - \bar{x}_2\)` differences in proportions observed by chance through simulation
+observe and collect might-have-been `\(\mu_1 - \mu_2\)` differences in proportions observed by chance through simulation
 
 --
 ### Step 3: *strength of the evidence (against null)*
 --
 Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
-
 
 
 ---
@@ -1830,6 +2664,577 @@ sample estimates:
    mean in group Breastfed mean in group NotBreastfed 
                      105.3                      100.9 
 ```
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+*BreastFeedIntell
+```
+]
+ 
+.panel2-histversion-auto[
+
+```
+# A tibble: 322 x 2
+   Feeding     GCI
+   &lt;chr&gt;     &lt;dbl&gt;
+ 1 Breastfed 127. 
+ 2 Breastfed 125. 
+ 3 Breastfed  99.8
+ 4 Breastfed 105. 
+ 5 Breastfed  97.3
+ 6 Breastfed 131. 
+ 7 Breastfed  98.5
+ 8 Breastfed 102. 
+ 9 Breastfed 105. 
+10 Breastfed 116. 
+# … with 312 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+* aes(GCI)
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+  aes(GCI) +
+* geom_rug()
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+* geom_histogram()
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+* facet_grid(rows = vars(Feeding))
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+* ggxmean::geom_xmean()
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+* ggxmean:::geom_tdist(height = 40,
+*                      alpha = .4,
+*                      fill = "green")
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+  ggxmean:::geom_tdist(height = 40,
+                       alpha = .4,
+                       fill = "green") +
+* ggxmean:::geom_ttestconf(color = "darkred")
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-histversion-auto[
+
+```r
+BreastFeedIntell %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+  ggxmean:::geom_tdist(height = 40,
+                       alpha = .4,
+                       fill = "green") +
+  ggxmean:::geom_ttestconf(color = "darkred") +
+* coord_cartesian(xlim = c(90, 110))
+```
+]
+ 
+.panel2-histversion-auto[
+![](ma206_lesson_16_files/figure-html/histversion_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-histversion-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-histversion-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-histversion-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+*set.seed(873849)
+```
+]
+ 
+.panel2-smaller_sample-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+*BreastFeedIntell
+```
+]
+ 
+.panel2-smaller_sample-auto[
+
+```
+# A tibble: 322 x 2
+   Feeding     GCI
+   &lt;chr&gt;     &lt;dbl&gt;
+ 1 Breastfed 127. 
+ 2 Breastfed 125. 
+ 3 Breastfed  99.8
+ 4 Breastfed 105. 
+ 5 Breastfed  97.3
+ 6 Breastfed 131. 
+ 7 Breastfed  98.5
+ 8 Breastfed 102. 
+ 9 Breastfed 105. 
+10 Breastfed 116. 
+# … with 312 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+* sample_n(30)
+```
+]
+ 
+.panel2-smaller_sample-auto[
+
+```
+# A tibble: 30 x 2
+   Feeding        GCI
+   &lt;chr&gt;        &lt;dbl&gt;
+ 1 Breastfed     98.2
+ 2 NotBreastfed  90.1
+ 3 Breastfed     99.3
+ 4 Breastfed    109. 
+ 5 NotBreastfed  88.5
+ 6 Breastfed     91.6
+ 7 Breastfed     97.4
+ 8 Breastfed    107. 
+ 9 NotBreastfed  91.1
+10 NotBreastfed  63.4
+# … with 20 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+* ggplot()
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+* aes(GCI)
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+  aes(GCI) +
+* geom_rug()
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+* geom_histogram()
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+* facet_grid(rows = vars(Feeding))
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+* ggxmean::geom_xmean()
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+* ggxmean:::geom_tdist(height = 40,
+*                      alpha = .4,
+*                      fill = "green")
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+  ggxmean:::geom_tdist(height = 40,
+                       alpha = .4,
+                       fill = "green") +
+* ggxmean:::geom_ttestconf(color = "darkred")
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-smaller_sample-auto[
+
+```r
+set.seed(873849)
+BreastFeedIntell %&gt;%
+  sample_n(30) %&gt;%
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+  ggxmean:::geom_tdist(height = 40,
+                       alpha = .4,
+                       fill = "green") +
+  ggxmean:::geom_ttestconf(color = "darkred") +
+* coord_cartesian(xlim = c(90, 110))
+```
+]
+ 
+.panel2-smaller_sample-auto[
+![](ma206_lesson_16_files/figure-html/smaller_sample_auto_12_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-smaller_sample-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-smaller_sample-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-smaller_sample-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

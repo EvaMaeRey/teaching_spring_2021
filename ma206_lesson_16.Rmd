@@ -227,6 +227,10 @@ Answer the question: Is observed (Step 1) consistent with what's we expect under
 ---
 
 
+
+
+
+
 ---
 
 # Are the means of an outcome for two groups different? (quantitative outcome)
@@ -283,19 +287,19 @@ BreastFeedIntell %>%
 class: inverse, middle
 
 
-# Two-proportion SSS
+# Two-mean SSS
 
 --
 
 ### Step 1: *statistic* 
 --
-calculate the difference in proportions between groups $\hat{p}_1 - \hat{p}_2$ 
+calculate the difference in proportions between groups $\bar{x}_1 - \bar{x}_2$ 
 
 --
 
 ### Step 2: *simulate* 
 --
-observe and collect might-have-been $\hat{p}_1 - \hat{p}_2$ differences in proportions observed by chance through simulation
+observe and collect might-have-been $\bar{x}_1 - \bar{x}_2$ differences in proportions observed by chance through simulation
 
 
 
@@ -329,6 +333,131 @@ BreastFeedIntell %>%
 class: inverse, middle
 
 
+# Two-mean SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups $\bar{x}_1 - \bar{x}_2$ 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been $\mu_1 - \mu_2$ differences in proportions observed by chance through simulation
+
+--
+### Step 3: *strength of the evidence (against null)*
+--
+Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
+
+
+
+---
+
+# Zooming in... Are the means of an outcome for two groups different? (quantitative outcome)
+
+---
+
+`r chunk_reveal("readdatafeeding2", break_type = 1)`
+
+```{r readdatafeeding2, message=F, include=F}
+library(tidyverse)
+read_csv(file = "data/chap6.BreastFeedIntell.csv") ->
+BreastFeedIntell
+```
+
+---
+class: inverse, middle, center
+
+
+# Two-means SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in *means* between groups $\bar{x}_1 - \bar{x}_2$ 
+
+
+---
+
+`r chunk_reveal("boxplotzoom", break_type = 1)`
+
+
+```{r boxplotzoom, include=F}
+BreastFeedIntell %>% 
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05, 
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean, 
+               geom = "point", 
+               col = "darkred", 
+               size = 5) +
+  labs(title = "Observed data") +
+  labs(subtitle = "GCI v. Feeding condition") +
+  coord_cartesian(ylim = c(99, 108))
+```
+
+
+
+---
+class: inverse, middle
+
+
+# Two-mean SSS
+
+--
+
+### Step 1: *statistic* 
+--
+calculate the difference in proportions between groups $\bar{x}_1 - \bar{x}_2$ 
+
+--
+
+### Step 2: *simulate* 
+--
+observe and collect might-have-been$mu_1 - \mu_2$ differences in proportions observed by chance through simulation
+
+
+
+
+---
+
+`r chunk_reveal("meandiffzoom", break_type = 20)`
+
+
+```{r meandiffzoom, include=F}
+BreastFeedIntell %>% 
+  mutate(GCI = sample(GCI)) %>% 
+  ggplot(data = .) +
+  theme_minimal(base_size = 25) +
+  aes(x = Feeding) +
+  aes(y = GCI) +
+  geom_boxplot() +
+  geom_jitter(width = .05, 
+              height = 0,
+              alpha = .5) +
+  stat_summary(fun.y = mean, 
+               geom = "point", 
+               col = "darkred", 
+               size = 5) +
+  labs(title = "Might-have-been observed") +
+  labs(subtitle = "If no true relationship between\nfeeding and GCI exist")  +
+  coord_cartesian(ylim = c(99, 108))
+```
+
+
+---
+class: inverse, middle
+
+
 # Two-proportion SSS
 
 --
@@ -341,13 +470,12 @@ calculate the difference in *means* between groups $\bar{x}_1 - \bar{x}_2$
 
 ### Step 2: *simulate* 
 --
-observe and collect might-have-been $\bar{x}_1 - \bar{x}_2$ differences in proportions observed by chance through simulation
+observe and collect might-have-been $\mu_1 - \mu_2$ differences in proportions observed by chance through simulation
 
 --
 ### Step 3: *strength of the evidence (against null)*
 --
 Answer the question: Is observed (Step 1) consistent with what's we expect under chance (Step 2)? Or inconsistent? p-value is the probability of observing as extreme (or more extreme) just by chance
-
 
 
 ---
@@ -362,4 +490,50 @@ t.test(GCI ~ Feeding,
        conf.level = .95,
        mu = 0)
 ```
+
+
+
+
+---
+
+`r chunk_reveal("histversion")`
+
+
+```{r histversion, include=F}
+BreastFeedIntell %>% 
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+  ggxmean:::geom_tdist(height = 40,
+                       alpha = .4,
+                       fill = "green") + 
+  ggxmean:::geom_ttestconf(color = "darkred") +
+  coord_cartesian(xlim = c(90, 110))
+```
+
+---
+
+`r chunk_reveal("smaller_sample")`
+
+
+```{r smaller_sample, include = F}
+set.seed(873849)
+BreastFeedIntell %>% 
+  sample_n(30) %>% 
+  ggplot() +
+  aes(GCI) +
+  geom_rug() +
+  geom_histogram() +
+  facet_grid(rows = vars(Feeding)) +
+  ggxmean::geom_xmean() +
+  ggxmean:::geom_tdist(height = 40,
+                       alpha = .4,
+                       fill = "green") +
+  ggxmean:::geom_ttestconf(color = "darkred") +
+  coord_cartesian(xlim = c(90, 110))
+```
+
 
