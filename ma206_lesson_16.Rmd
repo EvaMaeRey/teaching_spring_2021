@@ -561,11 +561,11 @@ t = \frac{statistic - hypothesized~value}{SE}
 $$
 --
 
-hypothesized value, is $\mu_1-\mu_2 = 0 $, i.e. the groups have the same mean.  
+hypothesized value, is $\mu_1-\mu_2 = 0$, i.e. the groups have the same mean.  
 
 --
 
-Therefore
+So
 
 $$
 t = \frac{\bar{x}_1 - \bar{x}_2 - 0}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}
